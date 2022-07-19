@@ -1,0 +1,2 @@
+alter login sa with
+alter login password = '1234'

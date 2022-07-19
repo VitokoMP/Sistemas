@@ -1,0 +1,49 @@
+ALTER PROCEDURE [dbo].[SP_13_POBLA_CAMPOS111] AS 
+
+declare @QUERY varchar(max)
+declare @trab_sitrel varchar(max)
+
+
+
+USE [caja_18]
+GO
+/****** Object:  StoredProcedure [dbo].[carga_bd_fija_04]    Script Date: 01/03/2013 16:13:06 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+ALTER procedure [dbo].[carga_bd_fija_04] as
+
+declare @query varchar(max)
+declare @fecha varchar(10)
+declare @tb_fecha varchar(max)
+
+set @tb_fecha = (select '_' + upper(case when datepart(m,GETDATE()) = 1 then 'Enero' when datepart(m,GETDATE()) = 2 then 'Febrero'
+	 when datepart(m,GETDATE()) = 3 then 'Marzo' when datepart(m,GETDATE()) = 4 then 'Abril'
+	 when datepart(m,GETDATE()) = 5 then 'Mayo' when datepart(m,GETDATE()) = 6 then 'Junio'
+	 when datepart(m,GETDATE()) = 7 then 'Julio' when datepart(m,GETDATE()) = 8 then 'Agosto'
+	 when datepart(m,GETDATE()) = 9 then 'Septiembre' when datepart(m,GETDATE()) = 10 then 'Octubre'
+	 when datepart(m,GETDATE()) = 11 then 'Noviembre' when datepart(m,GETDATE()) = 12 then 'Diciembre'
+else '' end) + '_' + cast(datepart(yyyy,GETDATE()) as varchar(10)))
+
+set @fecha = (select CONVERT(varchar(10),getdate()-1,112))
+set @query =
+
+-- carga datos
+' BULK INSERT VOLCADO ' +
+' FROM ' + '''' + 'D:\Carga_Socofin\CCHCarga_99' + '.txt' + '''' + '; ' 
+
+/*
+-- carga datos del dia en Historico
+' insert into CARGA_HIST (data,campana,fecha) ' +
+'select  data,' + '''' + 'CREDICHILE' + @tb_fecha + '''' + ', ' +
+' convert(datetime,convert(varchar(10),getdate(),120) + ' + '''' + ' 00:00:00.000' + '''' + ') ' +
+'from VOLCADO'
+*/
+
+--print(@query)
+exec(@query)
+
+--exec carga_bd_fija_04
